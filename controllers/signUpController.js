@@ -22,12 +22,26 @@ module.exports = {
   },
 
   register: (req, res) => {
-    signupModel.createUser(con, req.body, (err) => {
-      try {
-        res.redirect('/');
-      } catch (error) {
-        res.send(err);
+    /**
+     * Llamar al metodo de verificacion de email
+     * si el metodo deveulve un resultado quiere decir que ya existe
+     * enviar una alerta para informar que ese correo ya esta en uso,
+     * de lo contrario
+     * inserto el usuario en la bd
+     */
+    signupModel.checkEmail(con, req.body, (err, results) => {
+      if ( results.length > 0) {
+        res.render('alerts/emailValidation')
+      } else {
+          signupModel.createUser(con, req.body, (err) => {
+            try {
+              res.redirect('/signin');
+            } catch (error) {
+              res.send(err);
+            }
+          })
       }
-    })
+    });
+
   }
 }

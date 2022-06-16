@@ -8,5 +8,8 @@ module.exports = {
     const {name, email, password, user_type} = data;
     let pwHash = await bcryptjs.hash(password, 8);
     connection.query("CALL createUser(?, ?, ?, ?)", [name, email, pwHash, user_type], callback )
+  },
+  checkEmail: function(connection, data, callback){
+    connection.query("SELECT * FROM users WHERE email = ?", [data.email], callback)
   }
 }
