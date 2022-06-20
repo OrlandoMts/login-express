@@ -2,14 +2,14 @@ const bcryptjs = require('bcryptjs');
 
 module.exports = {
   getUser_type: function(connection, callback){
-    connection.query(process.env.DISTINCT_USER_TYPE, callback)
+    connection.query("SELECT DISTINCT user_type FROM users", callback)
   },
   createUser: async function (connection, data, callback){
     const {name, email, password, user_type} = data;
     let pwHash = await bcryptjs.hash(password, 8);
-    connection.query(process.env.CREATE_USER, [name, email, pwHash, user_type], callback )
+    connection.query("CALL createUser(?, ?, ?, ?)", [name, email, pwHash, user_type], callback )
   },
   checkEmail: function(connection, data, callback){
-    connection.query(process.env.GET_USER_BY_EMAIL, [data.email], callback)
+    connection.query("SELECT * FROM users WHERE email = ?", [data.email], callback)
   }
 }
