@@ -3,7 +3,6 @@ const con = require('../database/connection');
 const signupModel = require('../models/signup');
 
 const jwt = require('jsonwebtoken');
-const { promisify } = require('util');
 
 module.exports = {
   // eslint-disable-next-line no-unused-vars

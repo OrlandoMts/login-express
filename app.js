@@ -5,7 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 /* Variables de entorno */
-const dotenv = require('dotenv');
+require('dotenv').config({path: './env/.env'});
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -25,14 +25,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* Asignar variables de entorno */
-dotenv.config({path: './env/.env'});
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/signin', signInRouter);
 app.use('/signup', signUpRouter);
-app.use('/home', homeRouter);
+// app.use('/home', homeRouter);
+
+app.use(function(req, res, next){
+  if(!req.user)
+    res.header('Cache-control', 'private, no-cache, no-store, must-revalidate');
+    next();
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

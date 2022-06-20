@@ -27,11 +27,15 @@ module.exports = {
           } else{
             // Configuracion de JWT
             const id =  results[0].id;
+            const context = {
+              title: 'home',
+              name: results[0].name
+            }
 
             const token = jwt.sign({id:id}, process.env.JWT_SECRET,{
               expiresIn: process.env.JWT_TIEMPO_EXPIRACION
             });
-            console.log(`token ${token} para el usuario con correo ${email}`)
+            //console.log(`token ${token} para el usuario con correo ${email}`)
 
             // Configuracion de cookies
             const cookiesOptions = {
@@ -40,7 +44,9 @@ module.exports = {
             }
             //'jwt' es el nombre con el que aparecerá en el navegador
             res.cookie('jwt', token, cookiesOptions);
-            res.render('alerts/homeSuccess');
+            // res.render('alerts/homeSuccess');
+
+             res.render('login/home', context);
           }
         });
       }
